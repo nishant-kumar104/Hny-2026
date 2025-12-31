@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Happy New Year </title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
+    html, body {
+        margin:0; padding:0;
+        width:100%; height:100%;
+        overflow:hidden;
+        background: #ffffff;
+        font-family: "Poppins", "Apple Color Emoji", "Segoe UI Emoji", sans-serif;
+    }
+
+    #heart-container {
+        position:absolute;
+        top:0; left:0;
+        width:100%; height:100%;
+        pointer-events:none;
+        z-index: 1; 
+    }
+
+    .pink-heart, .red-border-heart {
+        position:absolute;
+        opacity:0;
+        transition:opacity .5s ease;
+    }
+
+    /* THE SAFE ZONE: This container prevents text from touching the borders */
+    #main-content {
+        position: relative;
+        z-index: 10; 
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center; 
+        height: 100vh;
+        width: 100%;
+        /* 45px padding ensures space between text and red border hearts */
+        padding: 45px; 
+        box-sizing: border-box;
+    }
+
+    #message-text {
+        width: 100%;
+        max-width: 650px;
+        color: #000000;
+        text-align: center;
+        /* Responsive scaling: Adjusted to ensure it fits mobile screens */
+        font-size: 5.5vw; 
+        line-height: 1.3;
+        opacity: 0;
+        transition: opacity 2.5s ease-in-out;
+        background: transparent;
+        text-shadow: 0 0 10px #fff, 0 0 5px #fff;
+        word-wrap: break-word;
+    }
+
+    /* Limits text size on big screens so it doesn't look too giant */
+    @media (min-width: 600px) {
+        #message-text { font-size: 28px; }
+    }
+
+    .top-love {
+        font-weight: 800;
+        font-size: 1.3em;
+        display: block;
+        margin-bottom: 15px;
+        color: #e60000;
+    }
+
+    .bottom-greet {
+        font-weight: 700;
+        font-size: 1.1em;
+        display: block;
+        margin-top: 15px;
+    }
+</style>
+</head>
+
+<body>
+
+<div id="heart-container"></div>
+
+<div id="main-content">
+    <div id="message-text">
+        <span class="top-love">I LOVE YOU </span>
+        
+        this year 2025 was full of struggles for me ,<br>
+        but ur presence made it the most important and beautiful year of my life .<br>
+        Your presence is so so so special for me ....<br>
+        May god bless me to manifest at least 60 more new years with you ..<br><br>
+        
+        I love you so much  ...<br>
+        <span class="bottom-greet">Happy new year sweetheart </span>
+    </div>
+</div>
+
+<script>
+let w = window.innerWidth;
+let h = window.innerHeight;
+let container = document.getElementById("heart-container");
+
+let pinkHeartImg = "https://cdn-icons-png.flaticon.com/512/833/833472.png";
+let redHeartImg = "https://cdn-icons-png.flaticon.com/512/2107/2107845.png"; 
+
+let totalPink = 250; 
+let count = 0;
+
+function start() {
+    // 1. Background hearts
+    let pinkInterval = setInterval(()=>{
+        let img = document.createElement("img");
+        img.src = pinkHeartImg;
+        img.className = "pink-heart";
+        img.style.width = "18px";
+        img.style.left = Math.random() * (w - 20) + "px";
+        img.style.top  = Math.random() * (h - 20) + "px";
+        container.appendChild(img);
+        setTimeout(()=>{ img.style.opacity = 0.3; }, 50);
+        count++;
+        if(count >= totalPink){
+            clearInterval(pinkInterval);
+            drawBorder();
+        }
+    }, 5);
+}
+
+function drawBorder(){
+    // 2. Red Boundary
+    let positions = [];
+    let step = 22;
+    for(let x=0; x<w; x+=step) positions.push([x,0]);
+    for(let y=0; y<h; y+=step) positions.push([w-step,y]);
+    for(let x=w-step; x>=0; x-=step) positions.push([x,h-step]);
+    for(let y=h-step; y>=0; y-=step) positions.push([0,y]);
+
+    let i=0;
+    let borderInterval = setInterval(()=>{
+        if(i >= positions.length){
+            clearInterval(borderInterval);
+            document.getElementById("message-text").style.opacity = 1;
+            return;
+        }
+        let pos = positions[i];
+        let img = document.createElement("img");
+        img.src = redHeartImg;
+        img.className = "red-border-heart";
+        img.style.width = "22px";
+        img.style.left = pos[0] + "px";
+        img.style.top  = pos[1] + "px";
+        container.appendChild(img);
+        setTimeout(()=>{ img.style.opacity = 1; }, 20);
+        i++;
+    }, 8);
+}
+
+window.onload = start;
+window.onresize = () => { w = window.innerWidth; h = window.innerHeight; };
+</script>
+
+</body>
+</html>
